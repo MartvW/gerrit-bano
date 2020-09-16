@@ -29,8 +29,16 @@ const data = {
         },
         "fields": [
             {
+                "name": "\u200b",
+                "value": "\u200b"
+            },
+            {
                 "name": ".info",
                 "value": "om dit bericht te laten zien."
+            },
+            {
+                "name": ".status",
+                "value": "de link naar de website voor de hoeveelheid water Gerrit heeft."
             },
             {
                 "name": ".water",
@@ -38,11 +46,11 @@ const data = {
             },
             {
                 "name": ".join",
-                "value": "om Gerrit te laten joinen."
+                "value": "om Gerrit te laten joinen.",
             },
             {
                 "name": ".leave",
-                "value": "om Gerrit te laten leaven."
+                "value": "om Gerrit te laten leaven.",
             },
             {
                 "name": ".play {url}",
@@ -78,7 +86,7 @@ bot.on('message', async msg => {
         if (msg.member.voice.channel) {
             const connection = await msg.member.voice.channel.join();
         } else {
-            msg.channel.send("Je moet in een voice channel zitten!");
+            msg.channel.send(`Je moet in een voice channel zitten!, ${msg.author}!`);
         }
     }
 
@@ -86,7 +94,7 @@ bot.on('message', async msg => {
         if (msg.member.voice.channel) {
             const connection = msg.member.voice.channel.leave();
         } else {
-            msg.channel.send("Je moet in de voice channel zitten waar ik ook in zit!");
+            msg.channel.send(`Je moet in de voice channel zitten waar ik ook in zit, ${msg.author}!`);
         }
     }
 
@@ -111,18 +119,27 @@ bot.on('message', async msg => {
             msg.member.voice.channel.join().then(connection => {
                 const dispatcher = connection.play(ytdl(args[0], { quality: 'highestaudio' }));
                 dispatcher.on('start', () => {
-                    msg.channel.send(`Nu aan het spelen: ${args[0]}`);
-                    console.log(`Nu aan het spelen: ${args[0]}`);
+                    msg.channel.send(`Nu aan het spelen: \n${args[0]}`);
+                    console.log(`Nu aan het spelen: \n${args[0]}`);
                 });
+
                 dispatcher.on('error', (error) => { console.error(error); });
             });
+        } else {
+            msg.channel.send(`Je moet wel in een voice channel zitten!, ${msg.author}!`)
         }
     }
 
     if (command === "stop") {
         if (msg.member.voice.channel) {
             const connection = msg.member.voice.channel.leave();
+        } else {
+            msg.channel.send(`Je moet wel in de voice channel zitten waar ik ook in zit!, ${msg.author}!`)
         }
+    }
+
+    if (command === "status") {
+        msg.channel.send('Hier kan je zien of ik nog leef of niet!\nhttps://planetx.landstede.dev/');
     }
 });
 
